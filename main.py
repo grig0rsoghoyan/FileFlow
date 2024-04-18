@@ -3,20 +3,29 @@ import socket
 from tkinter import filedialog
 from tkinter import messagebox
 import os
-
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 root = Tk()
-root.title("TestProgram")
-root.geometry("450x560+500+200")
-root.configure(bg="#f4fdfe")
+root.title("FileFlow")
+root.geometry("725x522")
+root.configure(bg="#FFFFFF")
 root.resizable(False, False)
 
+canvas = Canvas(
+    root,
+    bg="#FFFFFF",
+    height=522,
+    width=725,
+    bd=0,
+    highlightthickness=0,
+    relief="ridge"
+)
 
 def Send():
-    window=Toplevel(root)
+    window = Toplevel(root)
     window.title("Send")
-    window.geometry("450x560+500+200")
-    window.configure(bg="#f4fdfe")
+    window.geometry("725x522")
+    window.configure(bg="#FFFFFF")
     window.resizable(False, False)
 
     def select_file():
@@ -39,73 +48,79 @@ def Send():
         conn.send(file_data)
         print("Data has been transmitted successfully")
 
-
     icon1 = PhotoImage(file="img/send.png")
     window.iconphoto(False, icon1)
 
-    Sbackground = PhotoImage(file="img/sbackground.png")
-    Label(window, image=Sbackground, bg="#f4fdfe", width=440).place(x=0, y=-110)
+    canvas1 = Canvas(
+        window,
+        bg="#FFFFFF",
+        height=522,
+        width=725,
+        bd=0,
+        highlightthickness=0,
+        relief="ridge"
+    )
 
-    Mbackground = PhotoImage(file="img/id.png")
-    Label(window, image=Mbackground, bg="#f4fdfe").place(x=-70, y=360)
+    canvas1.place(x=0, y=0)
+    canvas1.create_text(
+        14.0,
+        9.0,
+        anchor="nw",
+        text="Send the file",
+        fill="#000000",
+        font=("ArimoHebrewSubsetItalic Italic", 48 * -1)
+    )
 
-    host=socket.gethostname()
-    Label(window, text=f"ID: {host}", bg='#F8F8F9', fg='black', font=("Acumin Variable Concept", 20, "bold")).place(x=80, y=425)
+    button_image_3 = PhotoImage(
+        file="img/button_1.png")
+    button_3 = Button(
+        window,
+        image=button_image_3,
+        borderwidth=0,
+        highlightthickness=0,
+        command=sender,
+        relief="flat",
+        bg="#ffffff"
+    )
+    button_3.place(
+        x=502.0,
+        y=90.0,
+        width=204.13424682617188,
+        height=274.0
+    )
 
-    Button(window, text="+ select file", width=10, height=1, font='arial 14 bold', bg = "#fff", fg="#000", command=select_file).place(x=160, y=100)
-    Button(window, text="SEND", width=8, height=1, font='arial 14 bold', bg="#000", fg="#fff", command=sender).place(x=332, y=100)
+    button_image_4 = PhotoImage(
+        file="img/button_2.png")
+    button_4 = Button(
+        window,
+        image=button_image_4,
+        borderwidth=0,
+        highlightthickness=0,
+        command=select_file,
+        relief="flat",
+        bg="#ffffff"
+    )
+    button_4.place(
+        x=14.0,
+        y=90.0,
+        width=470.0,
+        height=274.0
+    )
 
+    host = socket.gethostname()
+    Label(window, text=f"ID: {host}", bg='#F8F8F9', fg='black', font=("Acumin Variable Concept", 20, "bold")).place(x=17, y=394)
 
     window.mainloop()
+
 
 def Receive():
     main = Toplevel(root)
     main.title("Receive")
-    main.geometry("450x560+500+200")
-    main.configure(bg="#f4fdfe")
+    main.geometry("725x522")
+    main.configure(bg="#FFFFFF")
     main.resizable(False, False)
 
-    """
-    def receiver():
-        ID = SenderID.get()
-        filename1 = incoming_file.get()
-        s = socket.socket()
-        port = 8080
-        s.connect((ID, port))
-        file = open(filename1, "wb")
-        file_data = s.recv(1024)
-        file.write(file_data)
-        file.close()
-        print("File has been received successfully")
-    """
-    """
-    def receiver():
-        ID = SenderID.get()
-        filename1 = incoming_file.get()
 
-        try:
-            # Attempt to resolve the hostname
-            host_ip = socket.gethostbyname(ID)
-        except socket.gaierror:
-            # Handle invalid hostname
-            messagebox.showerror("Error", "Invalid hostname")
-            return
-
-        s = socket.socket()
-        port = 8080
-        try:
-            s.connect((host_ip, port))
-        except Exception as e:
-            # Handle connection error
-            messagebox.showerror("Error", f"Error connecting to {ID}: {e}")
-            return
-
-        file = open(filename1, "wb")
-        file_data = s.recv(1024)
-        file.write(file_data)
-        file.close()
-        print("File has been received successfully")
-    """
     def receiver():
         ID = SenderID.get()
         filename1 = incoming_file.get()
@@ -138,7 +153,7 @@ def Receive():
 
     icon2 = PhotoImage(file="img/receive.png")
     main.iconphoto(False, icon2)
-
+    """
     Hbackground = PhotoImage(file="img/reciever.png")
     Label(main, image=Hbackground, bg="#f4fdfe").place(x=-25,y=0)
 
@@ -160,27 +175,162 @@ def Receive():
     rr.place(x=20, y=500)
 
     main.mainloop()
+    """
+    canvas3 = Canvas(
+        main,
+        bg="#FFFFFF",
+        height=522,
+        width=725,
+        bd=0,
+        highlightthickness=0,
+        relief="ridge"
+    )
+
+    canvas3.place(x=0, y=0)
+    canvas3.create_text(
+        14.0,
+        9.0,
+        anchor="nw",
+        text="Receive files",
+        fill="#000000",
+        font=("ArimoHebrewSubsetItalic Italic", 64 * -1)
+    )
+
+    canvas3.create_text(
+        14.0,
+        123.0,
+        anchor="nw",
+        text="Input sender ID",
+        fill="#000000",
+        font=("JuliusSansOne Regular", 48 * -1)
+    )
+
+    entry_image_1 = PhotoImage(
+        file="img/entry_1.png")
+    entry_bg_1 = canvas3.create_image(
+        344.5,
+        203.5,
+        image=entry_image_1
+    )
+    SenderID = Entry(
+        main,
+        bd=0,
+        bg="#D9D9D9",
+        fg="#000716",
+        highlightthickness=0
+    )
+    SenderID.place(
+        x=34.5,
+        y=184.0,
+        width=620.0,
+        height=37.0
+    )
+
+    canvas3.create_text(
+        14.0,
+        251.0,
+        anchor="nw",
+        text="Filename for the incoming file",
+        fill="#000000",
+        font=("JuliusSansOne Regular", 40 * -1)
+    )
+
+    entry_image_2 = PhotoImage(
+        file="img/entry_2.png")
+    entry_bg_2 = canvas3.create_image(
+        344.5,
+        328.5,
+        image=entry_image_2
+    )
+    incoming_file = Entry(
+        main,
+        bd=0,
+        bg="#D9D9D9",
+        fg="#000716",
+        highlightthickness=0
+    )
+    incoming_file.place(
+        x=34.5,
+        y=309.0,
+        width=620.0,
+        height=37.0
+    )
+
+    button_image_5 = PhotoImage(
+        file="img/button_3.png")
+    button_5 = Button(
+        main,
+        image=button_image_5,
+        borderwidth=0,
+        highlightthickness=0,
+        command=receiver,
+        relief="flat",
+        bg="#ffffff"
+    )
+    button_5.place(
+        x=15.0,
+        y=380.0,
+        width=667.0,
+        height=98.0
+    )
+
+    main.mainloop()
+
 
 
 icon = PhotoImage(file="img/icon.png")
 root.iconphoto(False, icon)
 
-Label(root,text="File Transfer",font=("Acumin Variable Concept",20,'bold'),bg="#f4fdfe").place(x=20,y=30)
+canvas.place(x = 0, y = 0)
+canvas.create_rectangle(
+    1275.0,
+    184.0000056040464,
+    3831.0,
+    186.00022888183594,
+    fill="#000000",
+    outline="")
 
-Frame(root,width=400,height=2,bg="#f3f5f6").place(x=25,y=80)
+canvas.create_text(
+    195.0,
+    49.0,
+    anchor="nw",
+    text="FileFlow",
+    fill="#000000",
+    font=("ArimoHebrewSubsetItalic Italic", 96 * -1)
+)
 
-send_image = PhotoImage(file="img/send.png")
-send = Button(root, image=send_image, bg="#f4fdfe", bd=0, command=Send)
-send.place(x=50, y=100)
+button_image_1 = PhotoImage(
+    file="img/send.png")
+button_1 = Button(
+    image=button_image_1,
+    borderwidth=0,
+    highlightthickness=0,
+    command=Send,
+    relief="flat",
+    bg="#ffffff"
+)
+button_1.place(
+    x=111.0,
+    y=232.0,
+    width=329.1266174316406,
+    height=101.582275390625
+)
 
-receive_image = PhotoImage(file="img/receive.png")
-receive = Button(root, image=receive_image, bg="#f4fdfe", bd=0, command=Receive)
-receive.place(x=300, y=100)
-
-Label(root, text="Send", font=("Acumin Variable Concept", 17, "bold"), bg="#f4fdfe").place(x=67, y=200)
-Label(root, text="Receive", font=("Acumin Variable Concept", 17, "bold"), bg="#f4fdfe").place(x=302, y=200)
-
-background = PhotoImage(file="img/background.png")
-Label(root, image=background, bg="#f4fdfe").place(x=35, y=320)
+button_image_2 = PhotoImage(
+    file="img/receive.png")
+button_2 = Button(
+    image=button_image_2,
+    borderwidth=0,
+    highlightthickness=0,
+    command=Receive,
+    relief="flat",
+    bg="#ffffff"
+)
+button_2.place(
+    x=275.0,
+    y=362.0,
+    width=329.1266174316406,
+    height=101.582275390625
+)
 
 root.mainloop()
