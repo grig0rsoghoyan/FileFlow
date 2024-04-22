@@ -3,27 +3,92 @@ import socket
 from tkinter import filedialog
 from tkinter import messagebox
 import os
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
-root = Tk()
-root.title("FileFlow")
-root.geometry("725x522")
-root.configure(bg="#FFFFFF")
-root.resizable(False, False)
+def open_root():
+    root = Tk()
+    root.title("FileFlow")
+    root.geometry("725x522")
+    root.configure(bg="#FFFFFF")
+    root.resizable(False, False)
 
-canvas = Canvas(
-    root,
-    bg="#FFFFFF",
-    height=522,
-    width=725,
-    bd=0,
-    highlightthickness=0,
-    relief="ridge"
-)
+    canvas = Canvas(
+        root,
+        bg="#FFFFFF",
+        height=522,
+        width=725,
+        bd=0,
+        highlightthickness=0,
+        relief="ridge"
+    )
+
+    def Send():
+        root.destroy()  # Close the current window
+        SendWindow()
+
+    def Receive():
+        root.destroy()  # Close the current window
+        ReceiveWindow()
 
 
-def Send():
-    window = Toplevel(root)
+    icon = PhotoImage(file="img/icon.png")
+    root.iconphoto(False, icon)
+
+    canvas.place(x=0, y=0)
+    canvas.create_rectangle(
+        1275.0,
+        184.0000056040464,
+        3831.0,
+        186.00022888183594,
+        fill="#000000",
+        outline="")
+
+    canvas.create_text(
+        195.0,
+        49.0,
+        anchor="nw",
+        text="FileFlow",
+        fill="#000000",
+        font=("ArimoHebrewSubsetItalic Italic", 96 * -1)
+    )
+
+    button_image_1 = PhotoImage(
+        file="img/send.png")
+    button_1 = Button(
+        image=button_image_1,
+        borderwidth=0,
+        highlightthickness=0,
+        command=Send,
+        relief="flat",
+        bg="#ffffff"
+    )
+    button_1.place(
+        x=111.0,
+        y=232.0,
+        width=329.1266174316406,
+        height=101.582275390625
+    )
+
+    button_image_2 = PhotoImage(
+        file="img/receive.png")
+    button_2 = Button(
+        image=button_image_2,
+        borderwidth=0,
+        highlightthickness=0,
+        command=Receive,
+        relief="flat",
+        bg="#ffffff"
+    )
+    button_2.place(
+        x=275.0,
+        y=362.0,
+        width=329.1266174316406,
+        height=101.582275390625
+    )
+
+    root.mainloop()
+
+def SendWindow():
+    window = Toplevel()
     window.title("Send")
     window.geometry("725x522")
     window.configure(bg="#FFFFFF")
@@ -48,6 +113,10 @@ def Send():
         file_data = file.read(1024)
         conn.send(file_data)
         print("Data has been transmitted successfully")
+
+    def HomeFromSend():
+        window.destroy()  # Close the current window
+        open_root()
 
     icon1 = PhotoImage(file="img/send.png")
     window.iconphoto(False, icon1)
@@ -108,19 +177,36 @@ def Send():
         height=274.0
     )
 
+    button_image_6 = PhotoImage(
+        file="img/entry_1.png")
+    button_6 = Button(
+        window,
+        image=button_image_6,
+        borderwidth=0,
+        highlightthickness=0,
+        command=HomeFromSend(),
+        relief="flat",
+        bg="#ffffff"
+    )
+    button_6.place(
+        x=140.0,
+        y=200.0,
+        width=470.0,
+        height=274.0
+    )
+
     host = socket.gethostname()
-    Label(window, text=f"ID: {host}", bg='#F8F8F9', fg='black', font=("Acumin Variable Concept", 20, "bold")).place(
-        x=17, y=394)
+    Label(window, text=f"ID: {host}", bg='#F8F8F9', fg='black', font=("Acumin Variable Concept", 20, "bold")).place(x=17, y=394)
 
     window.mainloop()
 
-
-def Receive():
-    main = Toplevel(root)
+def ReceiveWindow():
+    main = Toplevel()
     main.title("Receive")
     main.geometry("725x522")
     main.configure(bg="#FFFFFF")
     main.resizable(False, False)
+
 
     def receiver():
         ID = SenderID.get()
@@ -151,6 +237,10 @@ def Receive():
             file.write(file_data)
         file.close()
         print("File has been received successfully")
+
+    def HomeFromReceive():
+        main.destroy()  # Close the current window
+        open_root()
 
     icon2 = PhotoImage(file="img/receive.png")
     main.iconphoto(False, icon2)
@@ -255,60 +345,4 @@ def Receive():
 
     main.mainloop()
 
-
-icon = PhotoImage(file="img/icon.png")
-root.iconphoto(False, icon)
-
-canvas.place(x=0, y=0)
-canvas.create_rectangle(
-    1275.0,
-    184.0000056040464,
-    3831.0,
-    186.00022888183594,
-    fill="#000000",
-    outline="")
-
-canvas.create_text(
-    195.0,
-    49.0,
-    anchor="nw",
-    text="FileFlow",
-    fill="#000000",
-    font=("ArimoHebrewSubsetItalic Italic", 96 * -1)
-)
-
-button_image_1 = PhotoImage(
-    file="img/send.png")
-button_1 = Button(
-    image=button_image_1,
-    borderwidth=0,
-    highlightthickness=0,
-    command=Send,
-    relief="flat",
-    bg="#ffffff"
-)
-button_1.place(
-    x=111.0,
-    y=232.0,
-    width=329.1266174316406,
-    height=101.582275390625
-)
-
-button_image_2 = PhotoImage(
-    file="img/receive.png")
-button_2 = Button(
-    image=button_image_2,
-    borderwidth=0,
-    highlightthickness=0,
-    command=Receive,
-    relief="flat",
-    bg="#ffffff"
-)
-button_2.place(
-    x=275.0,
-    y=362.0,
-    width=329.1266174316406,
-    height=101.582275390625
-)
-
-root.mainloop()
+open_root()

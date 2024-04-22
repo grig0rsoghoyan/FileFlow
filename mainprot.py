@@ -312,3 +312,118 @@ button_2.place(
 )
 
 root.mainloop()
+
+"""
+from tkinter import *
+import socket
+from tkinter import filedialog
+from tkinter import messagebox
+import os
+
+root = Tk()
+root.title("FileFlow")
+root.geometry("725x522")
+root.configure(bg="#FFFFFF")
+root.resizable(False, False)
+
+current_frame = None
+
+def send_frame():
+    global current_frame
+    if current_frame:
+        current_frame.destroy()
+    current_frame = send_window()
+
+def receive_frame():
+    global current_frame
+    if current_frame:
+        current_frame.destroy()
+    current_frame = receive_window()
+
+def home_frame():
+    global current_frame
+    if current_frame:
+        current_frame.destroy()
+    current_frame = home_window()
+
+def send_file():
+    filename = filedialog.askopenfilename(parent=root,
+                                          initialdir=os.getcwd(),
+                                          title="Select the File")
+    if filename:
+        s = socket.socket()
+        host = socket.gethostname()
+        port = 8080
+        s.bind((host, port))
+        print(f"Server started on {host}:{port}")
+        s.listen(1)
+        print("Waiting for any incoming connections...")
+        conn, addr = s.accept()
+        with open(filename, "rb") as file:
+            file_data = file.read(1024)
+            conn.send(file_data)
+        print("Data has been transmitted successfully")
+
+def receive_file():
+    ID = sender_id.get()
+    filename = incoming_file.get()
+    try:
+        host_ip = socket.gethostbyname(ID)
+    except socket.gaierror as e:
+        messagebox.showerror("Error", f"Invalid hostname: {e}")
+        return
+    try:
+        s = socket.socket()
+        port = 8080
+        s.connect((host_ip, port))
+    except Exception as e:
+        messagebox.showerror("Error", f"Error connecting to {ID}: {e}")
+        return
+    with open(filename, "wb") as file:
+        while True:
+            file_data = s.recv(1024)
+            if not file_data:
+                break
+            file.write(file_data)
+    print("File has been received successfully")
+
+def send_window():
+    frame = Frame(root, bg="#FFFFFF", width=725, height=522)
+    frame.place(x=0, y=0)
+    label_send = Label(frame, text="Send the file", bg="#FFFFFF", font=("Arial", 20))
+    label_send.pack(pady=20)
+    button_select_file = Button(frame, text="Select File", command=send_file)
+    button_select_file.pack()
+    return frame
+
+def receive_window():
+    frame = Frame(root, bg="#FFFFFF", width=725, height=522)
+    frame.place(x=0, y=0)
+    label_receive = Label(frame, text="Receive files", bg="#FFFFFF", font=("Arial", 20))
+    label_receive.pack(pady=20)
+    label_sender_id = Label(frame, text="Input sender ID", bg="#FFFFFF")
+    label_sender_id.pack()
+    global sender_id
+    sender_id = Entry(frame)
+    sender_id.pack()
+    label_incoming_file = Label(frame, text="Filename for the incoming file", bg="#FFFFFF")
+    label_incoming_file.pack()
+    global incoming_file
+    incoming_file = Entry(frame)
+    incoming_file.pack()
+    button_receive = Button(frame, text="Receive", command=receive_file)
+    button_receive.pack()
+    return frame
+
+def home_window():
+    frame = Frame(root, bg="#FFFFFF", width=725, height=522)
+    frame.place(x=0, y=0)
+    button_send = Button(frame, text="Send", command=send_frame)
+    button_send.place(x=50, y=50)
+    button_receive = Button(frame, text="Receive", command=receive_frame)
+    button_receive.place(x=150, y=50)
+    return frame
+
+current_frame = home_window()
+root.mainloop()
+"""
