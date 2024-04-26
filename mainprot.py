@@ -4,21 +4,29 @@ from tkinter import filedialog
 from tkinter import messagebox
 import os
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from pathlib import Path
+
+OUTPUT_PATH = Path(__file__).parent
+ASSETS_PATH = OUTPUT_PATH / Path(r"img/")
+
+def relative_to_assets(path: str) -> Path:
+    return ASSETS_PATH / Path(path)
 
 root = Tk()
 root.title("FileFlow")
 root.geometry("725x522")
-root.configure(bg="#FFFFFF")
+root.configure(bg = "#110D20")
 root.resizable(False, False)
+root.overrideredirect(True)
 
 canvas = Canvas(
     root,
-    bg="#FFFFFF",
-    height=522,
-    width=725,
-    bd=0,
-    highlightthickness=0,
-    relief="ridge"
+    bg = "#110D20",
+    height = 522,
+    width = 725,
+    bd = 0,
+    highlightthickness = 0,
+    relief = "ridge"
 )
 
 
@@ -26,8 +34,9 @@ def Send():
     window = Toplevel(root)
     window.title("Send")
     window.geometry("725x522")
-    window.configure(bg="#FFFFFF")
+    window.configure(bg="#120E20")
     window.resizable(False, False)
+    window.overrideredirect(True)
 
     def select_file():
         global filename
@@ -54,7 +63,7 @@ def Send():
 
     canvas1 = Canvas(
         window,
-        bg="#FFFFFF",
+        bg="#120E20",
         height=522,
         width=725,
         bd=0,
@@ -63,54 +72,102 @@ def Send():
     )
 
     canvas1.place(x=0, y=0)
-    canvas1.create_text(
-        14.0,
-        9.0,
-        anchor="nw",
-        text="Send the file",
-        fill="#000000",
-        font=("ArimoHebrewSubsetItalic Italic", 48 * -1)
+    image_image_3 = PhotoImage(
+        file=relative_to_assets("image_1.png"))
+    image_3 = canvas1.create_image(
+        362.0,
+        117.0,
+        image=image_image_3
     )
 
-    button_image_3 = PhotoImage(
-        file="img/button_1.png")
-    button_3 = Button(
+    image_image_4 = PhotoImage(
+        file=relative_to_assets("image_2.png"))
+    image_4 = canvas1.create_image(
+        131.0,
+        91.0,
+        image=image_image_4
+    )
+
+    button_image_1 = PhotoImage(
+        file=relative_to_assets("button_send.png"))
+    button_1 = Button(
         window,
-        image=button_image_3,
+        image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
         command=sender,
-        relief="flat",
-        bg="#ffffff"
+        relief="flat"
     )
-    button_3.place(
-        x=502.0,
-        y=90.0,
-        width=204.13424682617188,
-        height=274.0
+    button_1.place(
+        x=495.0,
+        y=160.0,
+        width=192.0,
+        height=202.0
     )
 
-    button_image_4 = PhotoImage(
-        file="img/button_2.png")
-    button_4 = Button(
+    button_image_2 = PhotoImage(
+        file=relative_to_assets("button_upload.png"))
+    button_2 = Button(
         window,
-        image=button_image_4,
+        image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
         command=select_file,
-        relief="flat",
-        bg="#ffffff"
+        relief="flat"
     )
-    button_4.place(
-        x=14.0,
-        y=90.0,
-        width=470.0,
-        height=274.0
+    button_2.place(
+        x=47.0,
+        y=161.0,
+        width=413.0,
+        height=201.0
+    )
+
+    image_image_5 = PhotoImage(
+        file=relative_to_assets("image_3.png"))
+    image_5 = canvas1.create_image(
+        367.0,
+        442.0,
+        image=image_image_5
+    )
+
+    button_image_home_1 = PhotoImage(
+        file=relative_to_assets("button_home_1.png"))
+    button_home = Button(
+        window,
+        bg="#110D20",
+        image=button_image_home_1,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: window.destroy(),
+        relief="flat"
+    )
+    button_home.place(
+        x=550.0,
+        y=0.0,
+        width=75.0,
+        height=75.0
+    )
+
+    button_image_close_1 = PhotoImage(
+        file=relative_to_assets("button_close_1.png"))
+    button_close = Button(
+        window,
+        bg="#110D20",
+        image=button_image_close_1,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: root.destroy(),
+        relief="flat"
+    )
+    button_close.place(
+        x=650.0,
+        y=0.0,
+        width=75.0,
+        height=75.0
     )
 
     host = socket.gethostname()
-    Label(window, text=f"ID: {host}", bg='#F8F8F9', fg='black', font=("Acumin Variable Concept", 20, "bold")).place(
-        x=17, y=394)
+    Label(window, text=f"ID: {host}", bg='#F8F8F9', fg='black', font=("Acumin Variable Concept", 20, "bold")).place(x=57, y=424)
 
     window.mainloop()
 
@@ -119,8 +176,9 @@ def Receive():
     main = Toplevel(root)
     main.title("Receive")
     main.geometry("725x522")
-    main.configure(bg="#FFFFFF")
+    main.configure(bg="#120E20")
     main.resizable(False, False)
+    main.overrideredirect(True)
 
     def receiver():
         ID = SenderID.get()
@@ -155,9 +213,9 @@ def Receive():
     icon2 = PhotoImage(file="img/receive.png")
     main.iconphoto(False, icon2)
 
-    canvas3 = Canvas(
+    canvas2 = Canvas(
         main,
-        bg="#FFFFFF",
+        bg="#120E20",
         height=522,
         width=725,
         bd=0,
@@ -165,92 +223,149 @@ def Receive():
         relief="ridge"
     )
 
-    canvas3.place(x=0, y=0)
-    canvas3.create_text(
-        14.0,
-        9.0,
-        anchor="nw",
-        text="Receive files",
-        fill="#000000",
-        font=("ArimoHebrewSubsetItalic Italic", 64 * -1)
+    canvas2.place(x=0, y=0)
+    image_image_1 = PhotoImage(
+        file=relative_to_assets("image_bg1.png"))
+    image_1 = canvas2.create_image(
+        311.0,
+        411.0,
+        image=image_image_1
     )
 
-    canvas3.create_text(
-        14.0,
-        123.0,
-        anchor="nw",
-        text="Input sender ID",
-        fill="#000000",
-        font=("JuliusSansOne Regular", 48 * -1)
+    image_image_2 = PhotoImage(
+        file=relative_to_assets("image_title1.png"))
+    image_2 = canvas2.create_image(
+        149.0,
+        74.0,
+        image=image_image_2
+    )
+
+    image_image_3 = PhotoImage(
+        file=relative_to_assets("image_rct.png"))
+    image_3 = canvas2.create_image(
+        362.0,
+        259.0,
+        image=image_image_3
+    )
+
+    image_image_4 = PhotoImage(
+        file=relative_to_assets("image_title0.png"))
+    image_4 = canvas2.create_image(
+        363.0,
+        157.0,
+        image=image_image_4
+    )
+
+    image_image_5 = PhotoImage(
+        file=relative_to_assets("image_id.png"))
+    image_5 = canvas2.create_image(
+        259.0,
+        213.0,
+        image=image_image_5
     )
 
     entry_image_1 = PhotoImage(
-        file="img/entry_1.png")
-    entry_bg_1 = canvas3.create_image(
-        344.5,
-        203.5,
-        image=entry_image_1
+        file=relative_to_assets("entry_id.png"))
+    entry_bg_1 = canvas2.create_image(
+        348.5,
+        258.0,
+        image=entry_image_1,
     )
     SenderID = Entry(
         main,
         bd=0,
-        bg="#D9D9D9",
-        fg="#000716",
+        bg="#120E20",
+        fg="#ffffff",
         highlightthickness=0
     )
     SenderID.place(
-        x=34.5,
-        y=184.0,
-        width=620.0,
-        height=37.0
+        x=159.0,
+        y=235.0,
+        width=379.0,
+        height=44.0
     )
 
-    canvas3.create_text(
-        14.0,
-        251.0,
-        anchor="nw",
-        text="Filename for the incoming file",
-        fill="#000000",
-        font=("JuliusSansOne Regular", 40 * -1)
+    image_image_6 = PhotoImage(
+        file=relative_to_assets("image_filename.png"))
+    image_6 = canvas2.create_image(
+        332.0,
+        303.0,
+        image=image_image_6
     )
 
     entry_image_2 = PhotoImage(
-        file="img/entry_2.png")
-    entry_bg_2 = canvas3.create_image(
-        344.5,
-        328.5,
+        file=relative_to_assets("entry_filename.png"))
+    entry_bg_2 = canvas2.create_image(
+        348.5,
+        348.0,
         image=entry_image_2
     )
     incoming_file = Entry(
         main,
         bd=0,
-        bg="#D9D9D9",
-        fg="#000716",
+        bg="#120E20",
+        fg="#ffffff",
         highlightthickness=0
     )
     incoming_file.place(
-        x=34.5,
-        y=309.0,
-        width=620.0,
-        height=37.0
+        x=159.0,
+        y=325.0,
+        width=379.0,
+        height=44.0
     )
 
-    button_image_5 = PhotoImage(
-        file="img/button_3.png")
-    button_5 = Button(
+    button_image_1 = PhotoImage(
+        file=relative_to_assets("button_receive.png"))
+    button_1 = Button(
         main,
-        image=button_image_5,
+        image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
         command=receiver,
-        relief="flat",
-        bg="#ffffff"
+        relief="flat"
     )
-    button_5.place(
-        x=15.0,
-        y=380.0,
-        width=667.0,
-        height=98.0
+    button_1.place(
+        x=223.0,
+        y=416.0,
+        width=279.0,
+        height=57.0
+    )
+
+    button_image_home = PhotoImage(
+        file=relative_to_assets("button_home.png"))
+    button_home = Button(
+        main,
+        bg="#110D20",
+        image=button_image_home,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: main.destroy(),
+        relief="flat"
+    )
+    button_home.place(
+        x=550.0,
+        y=0.0,
+        width=75.0,
+        height=75.0
+    )
+
+    button_image_close = PhotoImage(
+        file=relative_to_assets("button_close.png"))
+
+    button_close = Button(
+        main,
+        bg="#110D20",
+        image=button_image_close,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: root.destroy(),
+        relief="flat"
+    )
+    button_close.place(
+        x=650.0,
+        y=0.0,
+        width=75.0,
+        height=75.0
     )
 
     main.mainloop()
@@ -259,171 +374,71 @@ def Receive():
 icon = PhotoImage(file="img/icon.png")
 root.iconphoto(False, icon)
 
-canvas.place(x=0, y=0)
-canvas.create_rectangle(
-    1275.0,
-    184.0000056040464,
-    3831.0,
-    186.00022888183594,
-    fill="#000000",
-    outline="")
+canvas.place(x = 0, y = 0)
+image_image_1 = PhotoImage(
+    file=relative_to_assets("image_bg.png"))
+image_1 = canvas.create_image(
+    304.0,
+    431.0,
+    image=image_image_1
+)
 
-canvas.create_text(
-    195.0,
-    49.0,
-    anchor="nw",
-    text="FileFlow",
-    fill="#000000",
-    font=("ArimoHebrewSubsetItalic Italic", 96 * -1)
+image_image_2 = PhotoImage(
+    file=relative_to_assets("image_title.png"))
+image_2 = canvas.create_image(
+    362.0,
+    133.0,
+    image=image_image_2
 )
 
 button_image_1 = PhotoImage(
-    file="img/send.png")
+    file=relative_to_assets("button_send0.png"))
 button_1 = Button(
     image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
     command=Send,
-    relief="flat",
-    bg="#ffffff"
+    relief="flat"
 )
 button_1.place(
-    x=111.0,
-    y=232.0,
-    width=329.1266174316406,
-    height=101.582275390625
+    x=44.0,
+    y=241.0,
+    width=297.0,
+    height=65.0
 )
 
 button_image_2 = PhotoImage(
-    file="img/receive.png")
+    file=relative_to_assets("button_receive0.png"))
 button_2 = Button(
     image=button_image_2,
     borderwidth=0,
     highlightthickness=0,
     command=Receive,
-    relief="flat",
-    bg="#ffffff"
+    relief="flat"
 )
 button_2.place(
-    x=275.0,
-    y=362.0,
-    width=329.1266174316406,
-    height=101.582275390625
+    x=384.0,
+    y=241.0,
+    width=297.0,
+    height=65.0
 )
 
+button_image_close = PhotoImage(
+    file=relative_to_assets("button_close.png"))
+button_close = Button(
+    bg="#110D20",
+    image=button_image_close,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: root.destroy(),
+    relief="flat"
+)
+button_close.place(
+    x=650.0,
+    y=0.0,
+    width=75.0,
+    height=75.0
+)
+
+
 root.mainloop()
-
-"""
-from tkinter import *
-import socket
-from tkinter import filedialog
-from tkinter import messagebox
-import os
-
-root = Tk()
-root.title("FileFlow")
-root.geometry("725x522")
-root.configure(bg="#FFFFFF")
-root.resizable(False, False)
-
-current_frame = None
-
-def send_frame():
-    global current_frame
-    if current_frame:
-        current_frame.destroy()
-    current_frame = send_window()
-
-def receive_frame():
-    global current_frame
-    if current_frame:
-        current_frame.destroy()
-    current_frame = receive_window()
-
-def home_frame():
-    global current_frame
-    if current_frame:
-        current_frame.destroy()
-    current_frame = home_window()
-
-def send_file():
-    filename = filedialog.askopenfilename(parent=root,
-                                          initialdir=os.getcwd(),
-                                          title="Select the File")
-    if filename:
-        s = socket.socket()
-        host = socket.gethostname()
-        port = 8080
-        s.bind((host, port))
-        print(f"Server started on {host}:{port}")
-        s.listen(1)
-        print("Waiting for any incoming connections...")
-        conn, addr = s.accept()
-        with open(filename, "rb") as file:
-            file_data = file.read(1024)
-            conn.send(file_data)
-        print("Data has been transmitted successfully")
-
-def receive_file():
-    ID = sender_id.get()
-    filename = incoming_file.get()
-    try:
-        host_ip = socket.gethostbyname(ID)
-    except socket.gaierror as e:
-        messagebox.showerror("Error", f"Invalid hostname: {e}")
-        return
-    try:
-        s = socket.socket()
-        port = 8080
-        s.connect((host_ip, port))
-    except Exception as e:
-        messagebox.showerror("Error", f"Error connecting to {ID}: {e}")
-        return
-    with open(filename, "wb") as file:
-        while True:
-            file_data = s.recv(1024)
-            if not file_data:
-                break
-            file.write(file_data)
-    print("File has been received successfully")
-
-def send_window():
-    frame = Frame(root, bg="#FFFFFF", width=725, height=522)
-    frame.place(x=0, y=0)
-    label_send = Label(frame, text="Send the file", bg="#FFFFFF", font=("Arial", 20))
-    label_send.pack(pady=20)
-    button_select_file = Button(frame, text="Select File", command=send_file)
-    button_select_file.pack()
-    return frame
-
-def receive_window():
-    frame = Frame(root, bg="#FFFFFF", width=725, height=522)
-    frame.place(x=0, y=0)
-    label_receive = Label(frame, text="Receive files", bg="#FFFFFF", font=("Arial", 20))
-    label_receive.pack(pady=20)
-    label_sender_id = Label(frame, text="Input sender ID", bg="#FFFFFF")
-    label_sender_id.pack()
-    global sender_id
-    sender_id = Entry(frame)
-    sender_id.pack()
-    label_incoming_file = Label(frame, text="Filename for the incoming file", bg="#FFFFFF")
-    label_incoming_file.pack()
-    global incoming_file
-    incoming_file = Entry(frame)
-    incoming_file.pack()
-    button_receive = Button(frame, text="Receive", command=receive_file)
-    button_receive.pack()
-    return frame
-
-def home_window():
-    frame = Frame(root, bg="#FFFFFF", width=725, height=522)
-    frame.place(x=0, y=0)
-    button_send = Button(frame, text="Send", command=send_frame)
-    button_send.place(x=50, y=50)
-    button_receive = Button(frame, text="Receive", command=receive_frame)
-    button_receive.place(x=150, y=50)
-    return frame
-
-current_frame = home_window()
-root.mainloop()
-"""
