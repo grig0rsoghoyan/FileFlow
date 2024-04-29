@@ -3,7 +3,6 @@ import socket
 from tkinter import filedialog
 from tkinter import messagebox
 import os
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from pathlib import Path
 
 OUTPUT_PATH = Path(__file__).parent
@@ -11,24 +10,6 @@ ASSETS_PATH = OUTPUT_PATH / Path(r"img/")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
-
-root = Tk()
-root.title("FileFlow")
-root.geometry("725x522")
-root.configure(bg = "#110D20")
-root.resizable(False, False)
-root.overrideredirect(True)
-
-canvas = Canvas(
-    root,
-    bg = "#110D20",
-    height = 522,
-    width = 725,
-    bd = 0,
-    highlightthickness = 0,
-    relief = "ridge"
-)
-
 
 def Send():
     window = Toplevel(root)
@@ -39,24 +20,30 @@ def Send():
     window.overrideredirect(True)
 
     def select_file():
-        global filename
         filename = filedialog.askopenfilename(parent=window,
                                               initialdir=os.getcwd(),
-                                              title="Select the File", )
+                                              title="Select the File")
+        if filename:
+            sender(filename)
+        else:
+            messagebox.showerror("Error", "No file selected")
 
-    def sender():
-        s = socket.socket()
-        host = socket.gethostname()
-        port = 8080
-        s.bind((host, port))
-        print(f"Server started on {host}:{port}")
-        s.listen(1)  # Listen for incoming connections, with a backlog of 1
-        print("Waiting for any incoming connections...")
-        conn, addr = s.accept()
-        file = open(filename, "rb")
-        file_data = file.read(1024)
-        conn.send(file_data)
-        print("Data has been transmitted successfully")
+    def sender(filename):
+        try:
+            s = socket.socket()
+            host = socket.gethostname()
+            port = 8080
+            s.bind((host, port))
+            print(f"Server started on {host}:{port}")
+            s.listen(1)  # Listen for incoming connections, with a backlog of 1
+            print("Waiting for any incoming connections...")
+            conn, addr = s.accept()
+            with open(filename, "rb") as file:
+                file_data = file.read(1024)
+                conn.send(file_data)
+            print("Data has been transmitted successfully")
+        except Exception as e:
+            messagebox.showerror("Error", f"Error sending file: {e}")
 
     icon1 = PhotoImage(file="img/send.png")
     window.iconphoto(False, icon1)
@@ -170,7 +157,6 @@ def Send():
     Label(window, text=f"ID: {host}", bg='#F8F8F9', fg='black', font=("Acumin Variable Concept", 20, "bold")).place(x=57, y=424)
 
     window.mainloop()
-
 
 def Receive():
     main = Toplevel(root)
@@ -370,9 +356,25 @@ def Receive():
 
     main.mainloop()
 
+root = Tk()
+root.title("FileFlow")
+root.geometry("725x522")
+root.configure(bg = "#110D20")
+root.resizable(False, False)
+root.overrideredirect(True)
 
 icon = PhotoImage(file="img/icon.png")
 root.iconphoto(False, icon)
+
+canvas = Canvas(
+    root,
+    bg = "#110D20",
+    height = 522,
+    width = 725,
+    bd = 0,
+    highlightthickness = 0,
+    relief = "ridge"
+)
 
 canvas.place(x = 0, y = 0)
 image_image_1 = PhotoImage(
@@ -439,6 +441,5 @@ button_close.place(
     width=75.0,
     height=75.0
 )
-
 
 root.mainloop()
