@@ -19,14 +19,19 @@ def Send():
     window.resizable(False, False)
     window.overrideredirect(True)
 
+
+    filename = ""
+
     def select_file():
+        global filename
+
         filename = filedialog.askopenfilename(parent=window,
                                               initialdir=os.getcwd(),
                                               title="Select the File")
-        if filename:
-            sender(filename)
-        else:
+        if not filename:
             messagebox.showerror("Error", "No file selected")
+
+        return filename
 
     def sender(filename):
         try:
@@ -41,6 +46,7 @@ def Send():
             with open(filename, "rb") as file:
                 file_data = file.read(1024)
                 conn.send(file_data)
+            messagebox.showinfo(title=None, message="Data has been transmitted successfully")
             print("Data has been transmitted successfully")
         except Exception as e:
             messagebox.showerror("Error", f"Error sending file: {e}")
@@ -153,6 +159,7 @@ def Send():
         height=75.0
     )
 
+
     host = socket.gethostname()
     Label(window, text=f"ID: {host}", bg='#F8F8F9', fg='black', font=("Acumin Variable Concept", 20, "bold")).place(x=57, y=424)
 
@@ -194,6 +201,7 @@ def Receive():
                 break
             file.write(file_data)
         file.close()
+        messagebox.showinfo(title=None, message="File has been received successfully")
         print("File has been received successfully")
 
     icon2 = PhotoImage(file="img/receive.png")
@@ -441,5 +449,5 @@ button_close.place(
     width=75.0,
     height=75.0
 )
-
+messagebox.showinfo(title=None, message="Data has been transmitted successfully")
 root.mainloop()
