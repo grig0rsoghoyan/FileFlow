@@ -3,7 +3,6 @@ import socket
 from tkinter import filedialog
 from tkinter import messagebox
 import os
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from pathlib import Path
 
 OUTPUT_PATH = Path(__file__).parent
@@ -11,23 +10,6 @@ ASSETS_PATH = OUTPUT_PATH / Path(r"img/")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
-
-root = Tk()
-root.title("FileFlow")
-root.geometry("725x522")
-root.configure(bg = "#110D20")
-root.resizable(False, False)
-
-canvas = Canvas(
-    root,
-    bg = "#110D20",
-    height = 522,
-    width = 725,
-    bd = 0,
-    highlightthickness = 0,
-    relief = "ridge"
-)
-
 
 def Send():
     window = Toplevel(root)
@@ -54,10 +36,11 @@ def Send():
         file = open(filename, "rb")
         file_data = file.read(1024)
         conn.send(file_data)
+        messagebox.showinfo(title=None, message="Data has been transmitted successfully")
         print("Data has been transmitted successfully")
 
-    icon = PhotoImage(file="img/icon.png")
-    window.iconphoto(False, icon)
+    icon1 = PhotoImage(file="img/send.png")
+    window.iconphoto(False, icon1)
 
     canvas1 = Canvas(
         window,
@@ -133,7 +116,6 @@ def Send():
 
     window.mainloop()
 
-
 def Receive():
     main = Toplevel(root)
     main.title("Receive")
@@ -169,10 +151,11 @@ def Receive():
                 break
             file.write(file_data)
         file.close()
+        messagebox.showinfo(title=None, message="File has been received successfully")
         print("File has been received successfully")
 
-    icon = PhotoImage(file="img/icon.png")
-    main.iconphoto(False, icon)
+    icon2 = PhotoImage(file="img/receive.png")
+    main.iconphoto(False, icon2)
 
     canvas2 = Canvas(
         main,
@@ -294,9 +277,24 @@ def Receive():
 
     main.mainloop()
 
+root = Tk()
+root.title("FileFlow")
+root.geometry("725x522")
+root.configure(bg = "#110D20")
+root.resizable(False, False)
 
 icon = PhotoImage(file="img/icon.png")
 root.iconphoto(False, icon)
+
+canvas = Canvas(
+    root,
+    bg = "#110D20",
+    height = 522,
+    width = 725,
+    bd = 0,
+    highlightthickness = 0,
+    relief = "ridge"
+)
 
 canvas.place(x = 0, y = 0)
 image_image_1 = PhotoImage(
@@ -346,6 +344,5 @@ button_2.place(
     width=297.0,
     height=65.0
 )
-
 
 root.mainloop()
