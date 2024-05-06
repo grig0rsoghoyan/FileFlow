@@ -24,6 +24,10 @@ def Send():
                                               initialdir=os.getcwd(),
                                               title="Select the File", )
 
+        if filename != "":
+            Label(window, text=f"File name: {filename}", bg='#F8F8F9', fg='black',font=("Acumin Variable Concept", 20, "bold")).place(x=57, y=424)
+
+
     def sender():
         s = socket.socket()
         host = socket.gethostname()
@@ -111,8 +115,9 @@ def Send():
         image=image_image_5
     )
 
+    """
     host = socket.gethostname()
-    Label(window, text=f"ID: {host}", bg='#F8F8F9', fg='black', font=("Acumin Variable Concept", 20, "bold")).place(x=57, y=424)
+    Label(window, text=f"ID: {host}", bg='#F8F8F9', fg='black', font=("Acumin Variable Concept", 20, "bold")).place(x=57, y=424)"""
 
     window.mainloop()
 
