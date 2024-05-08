@@ -22,12 +22,27 @@ def Send():
         global filename
         filename = filedialog.askopenfilename(parent=window,
                                               initialdir=os.getcwd(),
-                                              title="Select the File", )
+                                              title="Select the File")
 
+        # Update the label with the new file name
+        if filename != "":
+            label.config(text=f"File name: {filename}")
+        else:
+            label.config(text="No file selected")
+
+
+    
+    """
+    def select_file():
+        global filename
+        filename = filedialog.askopenfilename(parent=window,
+                                              initialdir=os.getcwd(),
+                                              title="Select the File", )
+        
         if filename != "":
             Label(window, text=f"File name: {filename}", bg='#F8F8F9', fg='black',font=("Acumin Variable Concept", 20, "bold")).place(x=57, y=424)
-
-
+    """
+    
     def sender():
         s = socket.socket()
         host = socket.gethostname()
@@ -45,7 +60,7 @@ def Send():
 
     icon1 = PhotoImage(file="img/send.png")
     window.iconphoto(False, icon1)
-
+    
     canvas1 = Canvas(
         window,
         bg="#120E20",
@@ -111,14 +126,25 @@ def Send():
         file=relative_to_assets("image_3.png"))
     image_5 = canvas1.create_image(
         367.0,
-        442.0,
+        432.0,
         image=image_image_5
     )
+    
+    image_image_6 = PhotoImage(
+        file=relative_to_assets("image_3.png"))
+    image_6 = canvas1.create_image(
+        367.0,
+        482.0,
+        image=image_image_6
+    )
 
-    """
+    
     host = socket.gethostname()
-    Label(window, text=f"ID: {host}", bg='#F8F8F9', fg='black', font=("Acumin Variable Concept", 20, "bold")).place(x=57, y=424)"""
+    Label(window, text=f"ID: {host}", bg='#F8F8F9', fg='black', font=("Acumin Variable Concept", 20, "bold")).place(x=57, y=414)
 
+    label = Label(window, text="No file selected", bg='#F8F8F9', fg='black', font=("Acumin Variable Concept", 20, "bold"))
+    label.place(x=57, y=464)
+    
     window.mainloop()
 
 def Receive():
