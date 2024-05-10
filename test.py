@@ -1,33 +1,48 @@
-from tkinter import *
-from tkinter import filedialog
-import os
+import socket
+import subprocess
 
-def Send():
-    window = Toplevel(root)
-    window.title("Send")
-    window.geometry("725x522")
-    window.configure(bg="#120E20")
-    window.resizable(False, False)
+def get_local_ip():
+    # Get the local IP address of the device
+    try:
+        # Use a UDP socket to get the local IP address
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.connect(("8.8.8.8", 80))  # Google's DNS server
+        local_ip = sock.getsockname()[0]
+        sock.close()
+        return local_ip
+    except Exception as e:
+        print("Error:", e)
+        return None
 
-    def select_file():
-        global filename
-        filename = filedialog.askopenfilename(parent=window,
-                                              initialdir=os.getcwd(),
-                                              title="Select the File")
+def scan_network(local_ip):
+    # Scan the network for connected devices
+    network_prefix = ".".join(local_ip.split(".")[:-1]) + "."
+    connected_devices = []
 
-        # Update the label with the new file name
-        if filename != "":
-            label.config(text=f"File name: {filename}")
+    for i in range(1, 255):  # Assumes /24 subnet
+        ip = network_prefix + str(i)
+        if ip != local_ip:
+            # Ping the IP address to check if it's reachable
+            result = subprocess.call(['ping', '-c', '1', '-W', '1', ip], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            if result == 0:
+                connected_devices.append(ip)
+
+    return connected_devices
+
+def main():
+    local_ip = get_local_ip()
+    if local_ip:
+        print("Local IP Address:", local_ip)
+        print("Scanning network for connected devices...")
+        devices = scan_network(local_ip)
+        if devices:
+            print("Connected devices:")
+            for device in devices:
+                print(device)
         else:
-            label.config(text="No file selected")
+            print("No devices found on the network.")
+    else:
+        print("Failed to retrieve local IP address.")
 
-    label = Label(window, text="No file selected", bg='#F8F8F9', fg='black', font=("Acumin Variable Concept", 20, "bold"))
-    label.place(x=57, y=424)
-
-    select_button = Button(window, text="Select File", command=select_file)
-    select_button.place(x=57, y=450)
-
-# Assuming root is defined elsewhere in your code
-root = Tk()
-Send()
-root.mainloop()
+if __name__ == "__main__":
+    main()
