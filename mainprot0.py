@@ -24,24 +24,14 @@ def Send():
                                               initialdir=os.getcwd(),
                                               title="Select the File")
 
+
         # Update the label with the new file name
         if filename != "":
-            label.config(text=f"File name: {filename}")
+            short_filename = os.path.basename(filename)
+            label.config(text=f"File name: {short_filename}")
         else:
             label.config(text="No file selected")
 
-
-    
-    """
-    def select_file():
-        global filename
-        filename = filedialog.askopenfilename(parent=window,
-                                              initialdir=os.getcwd(),
-                                              title="Select the File", )
-        
-        if filename != "":
-            Label(window, text=f"File name: {filename}", bg='#F8F8F9', fg='black',font=("Acumin Variable Concept", 20, "bold")).place(x=57, y=424)
-    """
     
     def sender():
         s = socket.socket()
